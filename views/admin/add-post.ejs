@@ -3,7 +3,7 @@
 <a href="/dashboard" class="back " >&larr; Back </a>
 
 
-<form action="/add-post" method="POST" class=" bg2" enctype="multipart/form-data">
+<form action="/add-post" method="post" class="bg2"  enctype="multipart/form-data">
 
     <div class=" bg3">
         <h1 class="add-post">Add New Post</h1>
@@ -14,7 +14,7 @@
  <div class="bg5">
 
 <label for="image"><b>Upload Image: </b></label>
-<input type="file" class="box" name="image">
+<input  class="box" type="file" name="image" accept="image/*" required>
 
 
 <label for="title"><b>Title: </b></label>

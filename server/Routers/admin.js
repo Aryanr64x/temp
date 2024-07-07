@@ -16,16 +16,17 @@ MiddleWare to upload image
 */
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/uploads');
+  destination: (req, file, cb) => {
+      cb(null, 'public/images');
   },
-  filename: function (req, file, cb) {
-    // const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-    cb(null, `${ Date.now()}-${file.originalname} `)
+  filename: (req, file, cb) => {
+      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   }
-}) 
+});
 
-const upload = multer({ storage: storage })
+const upload = multer({ storage: storage });
+
+
 
 
 
@@ -205,63 +206,63 @@ router.get('/add-post',authMiddleware,async(req,res)=>{
 -->Admin-create new post 
 */
 
+
 router.post('/add-post',authMiddleware,upload.single('image'),async(req,res)=>{
-    // 
-    try {
-        const data=req.body;
-        // console.log(req.body);
-        // console.log(req.file.filename);
+  // 
+  try {
+      const data=req.body;
+      console.log(req.body);
+      console.log(req.file.filename);
 
-        try {
-            const newPost=new post({
-               image:'/uploads/${req.file.filename}',
-               title:data.title,
-               price:data.price,
-               number:data.number,
-               upiId:data.title,
-               description:data.description
+      try {
+          const newPost=new post({
+             image:`images/${req.file.filename}`,
+             title:data.title,
+             price:data.price,
+             number:data.number,
+             upiId:data.title,
+             description:data.description
 
 
-            });
-            await post.create(newPost);
-            return res.redirect('/dashboard')
-        } catch (error) {
-            console.log(error);
-        }
-      
-     return res.redirect('/dashboard');
-      
-    } catch (error) {
-     console.log(error)
-    }
- });
+          });
+          await post.create(newPost);
+          return res.redirect('/dashboard')
+      } catch (error) {
+          console.log(error);
+      }
+    
+   return res.redirect('/dashboard');
+    
+  } catch (error) {
+   console.log(error)
+  }
+});
 
- /**
- * GET /
- * Admin - Create New Post
+/**
+* GET /
+* Admin - Create New Post
 */
 router.get('/edit-post/:id', authMiddleware, async (req, res) => {
-    try {
-  
-      const local = {
-        title: "Edit Post",
-        description: "edit the post",
-      };
-  
-      const data = await post.findOne({ _id: req.params.id });
-  
-      res.render('admin/edit-post', {
-        local,
-        data,
-        layout: adminLayout
-      })
-  
-    } catch (error) {
-      console.log(error);
-    }
-  
-  });
-  
+  try {
+
+    const local = {
+      title: "Edit Post",
+      description: "edit the post",
+    };
+
+    const data = await post.findOne({ _id: req.params.id });
+
+    res.render('admin/edit-post', {
+      local,
+      data,
+      layout: adminLayout
+    })
+
+  } catch (error) {
+    console.log(error);
+  }
+
+});
   
   /**
    * PUT /
